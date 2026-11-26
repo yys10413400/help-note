@@ -115,6 +115,11 @@ label { display: block; font-weight: 600; margin-bottom: 14px; }
 .stepedit textarea { resize: vertical; }
 .stepedit .del { border: none; background: none; color: #b0a999; font-size: 20px; }
 /* ── 작은 창 (PC 작은 창, 갤럭시 팝업 화면) ── */
+.pinbtn {
+  border: none; background: #ffe45c; color: #5c4a00; font-weight: 700; font-size: 14px;
+  border-radius: 20px; padding: 6px 12px; margin-left: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.12);
+}
+.pinbtn:hover { background: #ffd92e; }
 .mini .demo { font-size: 11px; padding: 3px 8px; }
 .pip-here { margin: 20px 16px; text-align: center; color: #7a756b; line-height: 1.6; }
 .pip #pipBtn, .pip #leave { display: none; }

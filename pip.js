@@ -2,6 +2,10 @@
 export const pipSupported = 'documentPictureInPicture' in window;
 
 export async function openPip({ el, placeholder, cls, width, height }) {
+  if (!pipSupported) {
+    alert('이 브라우저는 작은 창 띄우기를 지원하지 않아요.\nPC의 크롬이나 엣지(최신 버전)에서 열어 주세요.\n태블릿은 이 페이지를 홈 화면에 추가한 뒤 팝업 화면으로 열어 주세요.');
+    return;
+  }
   if (window.documentPictureInPicture.window) return; // 이미 열려 있어요
   let pip;
   try {

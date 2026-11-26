@@ -1,5 +1,5 @@
 import { openStore } from './store.js';
-import { pipSupported, openPip, autoMini } from './pip.js';
+import { pipSupported, openPip, autoMini } from './pip.js?v=3';
 
 // 요소를 미리 모아 둬요. 작은 창(PiP)으로 옮겨도 그대로 찾을 수 있게.
 const byId = {};
@@ -202,7 +202,7 @@ $('clearStudents').onclick = () => {
 };
 
 autoMini();
-if (pipSupported) $('pipBtn').hidden = false;
+$('pipBtn').hidden = false;
 $('pipBtn').onclick = () => openPip({ el: $('helpBox'), placeholder: $('pipHere'), cls: 'teacher', width: 320, height: 360 });
 
 openRoom();
