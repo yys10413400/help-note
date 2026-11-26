@@ -1,6 +1,10 @@
 import { openStore } from './store.js';
+import { pipSupported, openPip, autoMini } from './pip.js';
 
-const $ = (id) => document.getElementById(id);
+// 요소를 미리 모아 둬요. 작은 창(PiP)으로 옮겨도 그대로 찾을 수 있게.
+const byId = {};
+document.querySelectorAll('[id]').forEach((e) => { byId[e.id] = e; });
+const $ = (id) => byId[id];
 const store = await openStore();
 if (store.mode === 'demo') $('demo').hidden = false;
 
@@ -105,5 +109,10 @@ $('leave').onclick = () => {
   me = null;
   showJoin();
 };
+
+/* ── 작게 보기 ── */
+autoMini();
+if (pipSupported) $('pipBtn').hidden = false;
+$('pipBtn').onclick = () => openPip({ el: $('app'), placeholder: $('pipHere'), cls: 'student', width: 340, height: 330 });
 
 if (me) start(); else showJoin();

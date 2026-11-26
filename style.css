@@ -114,6 +114,30 @@ label { display: block; font-weight: 600; margin-bottom: 14px; }
 .stepedit input { margin-top: 0; font-weight: 700; }
 .stepedit textarea { resize: vertical; }
 .stepedit .del { border: none; background: none; color: #b0a999; font-size: 20px; }
+/* ── 작은 창 (PC 작은 창, 갤럭시 팝업 화면) ── */
+.mini .demo { font-size: 11px; padding: 3px 8px; }
+.pip-here { margin: 20px 16px; text-align: center; color: #7a756b; line-height: 1.6; }
+.pip #pipBtn, .pip #leave { display: none; }
+.mini.student .bar { padding: 6px 12px; font-size: 14px; }
+.mini .note {
+  margin: 4px 10px 10px; padding: 12px 14px 14px; min-height: 0; transform: none;
+  border-radius: 4px 4px 4px 18px; box-shadow: 0 4px 10px rgba(120,100,20,.15);
+}
+.mini .note .step { font-size: 12px; padding: 2px 8px; }
+.mini .note h2 { font-size: 20px; margin: 8px 0 4px; }
+.mini .note p { font-size: 15px; line-height: 1.5; }
+.mini .actions { margin: 0 10px 10px; gap: 8px; }
+.mini .big { font-size: 16px; padding: 10px 8px; border-radius: 10px; }
+.mini #helpForm, .mini .waiting { margin: 0 10px; padding: 12px; }
+.mini .waiting { font-size: 16px; }
+.mini label { margin-bottom: 8px; font-size: 14px; }
+.mini.student .join { margin: 12px 10px; padding: 16px; }
+.pip.teacher { padding: 10px; }
+.pip.teacher #helpBox h2 { margin: 0 0 8px; }
+.pip .helpcard { padding: 8px 10px; gap: 8px; margin-bottom: 8px; }
+.pip .helpcard .who { font-size: 17px; }
+.pip .helpcard button { padding: 8px 10px; font-size: 14px; }
+
 #addStep {
   width: 100%; border: 2px dashed #c9c3b6; background: none; border-radius: 12px; padding: 12px; color: #7a756b;
 }

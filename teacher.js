@@ -1,6 +1,10 @@
 import { openStore } from './store.js';
+import { pipSupported, openPip, autoMini } from './pip.js';
 
-const $ = (id) => document.getElementById(id);
+// 요소를 미리 모아 둬요. 작은 창(PiP)으로 옮겨도 그대로 찾을 수 있게.
+const byId = {};
+document.querySelectorAll('[id]').forEach((e) => { byId[e.id] = e; });
+const $ = (id) => byId[id];
 const el = (tag, cls, text) => {
   const e = document.createElement(tag);
   if (cls) e.className = cls;
@@ -196,5 +200,9 @@ $('clearStudents').onclick = () => {
   if (!confirm('학생 목록과 도움 요청을 모두 지울까요? (새 수업을 시작할 때)')) return;
   store.remove(`rooms/${room}/students`);
 };
+
+autoMini();
+if (pipSupported) $('pipBtn').hidden = false;
+$('pipBtn').onclick = () => openPip({ el: $('helpBox'), placeholder: $('pipHere'), cls: 'teacher', width: 320, height: 360 });
 
 openRoom();
