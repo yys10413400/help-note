@@ -1,5 +1,5 @@
-import { openStore } from './store.js';
-import { pipSupported, openPip, autoMini } from './pip.js?v=5';
+import { openStore } from './store.js?v=6';
+import { pipSupported, openPip, autoMini } from './pip.js?v=6';
 
 // 요소를 미리 모아 둬요. 작은 창(PiP)으로 옮겨도 그대로 찾을 수 있게.
 const byId = {};

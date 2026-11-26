@@ -1,5 +1,5 @@
 // 데이터 저장소: Firebase가 설정돼 있으면 온라인, 아니면 '연습 모드'(이 브라우저 안의 탭끼리만)
-import { firebaseConfig } from './config.js';
+import { firebaseConfig } from './config.js?v=6';
 
 const FB = 'https://www.gstatic.com/firebasejs/10.12.2/';
 
