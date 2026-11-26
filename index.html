@@ -4,60 +4,68 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>도움 메모</title>
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css?v=8">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
-<meta name="theme-color" content="#ffe45c">
+<meta name="theme-color" content="#e6ebef">
 </head>
 <body class="student">
 <div id="appbar" class="appbar" hidden>
-  <span>📝 도움 메모</span>
-  <button id="appMin" title="작게 내리기">─</button><button id="appClose" title="닫기">✕</button>
+  <span>도움 메모</span>
+  <button id="appMin" title="작게 내리기" aria-label="작게 내리기">─</button><button id="appClose" title="닫기" aria-label="닫기">✕</button>
 </div>
-<div id="demo" class="demo" hidden>연습 모드: 이 컴퓨터 안에서만 작동해요</div>
+<div id="demo" class="demo" hidden>연습 모드예요. 이 컴퓨터 안에서만 연결돼요.</div>
 
-<section id="join" class="card join" hidden>
-  <h1>📝 도움 메모</h1>
-  <label>방 번호<input id="room" inputmode="numeric" maxlength="6" placeholder="선생님이 알려준 번호"></label>
-  <label>내 이름<input id="name" maxlength="12" placeholder="이름"></label>
-  <button id="joinBtn" class="big">들어가기</button>
+<section id="join" class="join paper" hidden>
+  <span class="tape" aria-hidden="true"></span>
+  <h1>도움 메모</h1>
+  <label>방 번호<input id="room" inputmode="numeric" maxlength="6" placeholder="선생님이 알려준 번호" autocomplete="off"></label>
+  <label>내 이름<input id="name" maxlength="12" placeholder="이름" autocomplete="off"></label>
+  <button id="joinBtn" class="btn primary">들어가기</button>
 </section>
 
 <main id="app" hidden>
   <header class="bar">
-    <span id="me"></span>
-    <span><button id="pipBtn" class="pinbtn" title="다른 창 위에 항상 떠 있는 작은 메모지로 띄워요">📌 작게 띄우기</button><button id="leave" class="link">나가기</button></span>
+    <span id="me" class="me"></span>
+    <span class="bar-actions"><button id="pipBtn" class="chip-btn" title="다른 창 위에 항상 떠 있는 작은 메모지로 띄워요">작게 띄우기</button><button id="leave" class="text-btn">나가기</button></span>
   </header>
 
-  <article class="note">
-    <div class="step" id="stepNo"></div>
+  <article class="note paper">
+    <span class="tape" aria-hidden="true"></span>
+    <div class="note-top">
+      <span class="step-label" id="stepNo"></span>
+      <span class="dots" id="dots" aria-hidden="true"></span>
+    </div>
     <h2 id="title"></h2>
     <p id="desc"></p>
+    <span id="stamp" class="stamp" hidden>다 했어요</span>
   </article>
 
   <div class="actions" id="actions">
-    <button id="doneBtn" class="big ok">✅ 다 했어요</button>
-    <button id="helpBtn" class="big help">🙋 도와주세요</button>
+    <button id="doneBtn" class="btn done">다 했어요</button>
+    <button id="helpBtn" class="btn help">도와주세요</button>
   </div>
 
-  <form id="helpForm" class="card" hidden>
-    <label>어디가 어려운지 써 주세요 (안 써도 돼요)<textarea id="msg" maxlength="80" rows="2"></textarea></label>
+  <form id="helpForm" class="sheet" hidden>
+    <label for="msg">어디가 어려운지 써 주세요 <span class="opt">(안 써도 돼요)</span></label>
+    <textarea id="msg" maxlength="80" rows="2" placeholder="예: 캐릭터가 안 움직여요"></textarea>
     <div class="row">
-      <button type="button" id="cancelHelp" class="link">취소</button>
-      <button class="big help">보내기</button>
+      <button type="button" id="cancelHelp" class="text-btn">취소</button>
+      <button class="btn help">선생님 부르기</button>
     </div>
   </form>
 
-  <div id="waiting" class="card waiting" hidden>
-    <p>🙋 선생님께 알렸어요. 곧 갈게요!</p>
-    <p id="myMsg" class="muted"></p>
-    <button id="solved" class="link">혼자 해결했어요</button>
+  <div id="waiting" class="sheet waiting" hidden>
+    <p class="wait-title"><span class="pulse" aria-hidden="true"></span>선생님께 알렸어요. 곧 갈게요!</p>
+    <p id="myMsg" class="wait-msg"></p>
+    <button id="solved" class="text-btn">혼자 해결했어요</button>
   </div>
 </main>
 
-<div id="pipHere" class="card pip-here" hidden>📌 메모지를 작은 창으로 띄웠어요.<br>작은 창을 닫으면 여기로 돌아와요.</div>
+<div id="pipHere" class="pip-here" hidden>메모지를 작은 창으로 띄웠어요.<br>작은 창을 닫으면 여기로 돌아와요.</div>
 
-<script type="module" src="student.js?v=6"></script>
+<script type="module" src="student.js?v=8"></script>
 </body>
 </html>

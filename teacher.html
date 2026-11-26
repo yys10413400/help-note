@@ -4,49 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>도움 메모 · 선생님</title>
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css?v=8">
 <link rel="manifest" href="manifest-teacher.webmanifest">
 <link rel="icon" href="icon-192.png">
-<meta name="theme-color" content="#ffe45c">
+<meta name="theme-color" content="#f3f5f4">
 </head>
 <body class="teacher">
-<div id="demo" class="demo" hidden>연습 모드: 이 컴퓨터의 브라우저 탭끼리만 연결돼요. Firebase를 설정하면 아이들 태블릿과 연결돼요.</div>
+<div id="demo" class="demo" hidden>연습 모드예요. 이 컴퓨터의 브라우저 탭끼리만 연결돼요.</div>
 
 <header class="tbar">
-  <h1>📝 도움 메모 · 선생님</h1>
-  <div class="roominfo">방 번호<b id="roomCode"></b><button id="newRoom" class="link">바꾸기</button></div>
-  <div>학생 주소 <a id="studentLink" target="_blank"></a> <button id="copy" class="link">복사</button></div>
+  <div class="brand"><span class="brand-mark" aria-hidden="true"></span>도움 메모</div>
+  <div class="room">
+    <span class="room-label">방 번호</span>
+    <b id="roomCode" class="room-code"></b>
+    <button id="newRoom" class="ghost">바꾸기</button>
+  </div>
+  <div class="share">
+    <span class="room-label">학생 주소</span>
+    <a id="studentLink" target="_blank"></a>
+    <button id="copy" class="ghost">복사</button>
+  </div>
   <a class="getapp" href="https://github.com/yys10413400/help-note/releases/latest/download/help-note.exe"
-     title="아이들 PC 바탕화면에 두고 더블클릭하면 늘 맨 위에 메모지가 떠요. 설치는 필요 없어요.">💾 아이들 PC 프로그램 받기</a>
+     title="아이들 PC 바탕화면에 두고 더블클릭하면 늘 맨 위에 메모지가 떠요. 설치는 필요 없어요.">아이들 PC 프로그램 받기</a>
 </header>
 
-<div class="grid">
-  <section class="col">
-    <div id="helpBox">
-      <h2>🙋 도움 요청 <span id="helpCount" class="pill">0</span>
-        <button id="pipBtn" class="pinbtn" title="다른 창 위에 항상 떠 있는 작은 창으로 띄워요">📌 작게 띄우기</button></h2>
-      <div id="helpList"></div>
+<div class="board">
+  <section class="pane queue-pane">
+    <div id="helpBox" class="queue">
+      <div class="pane-head">
+        <h2>도움 요청 <span id="helpCount" class="count">0</span></h2>
+        <button id="pipBtn" class="ghost" title="다른 창 위에 항상 떠 있는 작은 창으로 띄워요">작은 창으로 띄우기</button>
+      </div>
+      <ol id="helpList" class="queue-list"></ol>
     </div>
-    <div id="pipHere" class="empty" hidden>📌 도움 요청을 작은 창으로 띄웠어요. 작은 창을 닫으면 여기로 돌아와요.</div>
+    <div id="pipHere" class="pip-here" hidden>도움 요청을 작은 창으로 띄웠어요. 작은 창을 닫으면 여기로 돌아와요.</div>
 
-    <h2>👧 우리 반 <span id="doneCount" class="pill"></span></h2>
-    <div id="students" class="students"></div>
-    <button id="clearStudents" class="link danger">학생 목록 비우기</button>
+    <div class="pane-head class-head">
+      <h2>우리 반</h2>
+      <span id="doneCount" class="done-count"></span>
+    </div>
+    <div class="donebar" aria-hidden="true"><span id="doneBar"></span></div>
+    <div id="students" class="roster"></div>
+    <button id="clearStudents" class="ghost danger">학생 목록 비우기</button>
   </section>
 
-  <section class="col">
-    <h2>📌 지금 할 일</h2>
-    <div class="stepnav">
-      <button id="prev" title="이전 단계">◀</button>
-      <span id="curLabel"></span>
-      <button id="next" title="다음 단계">▶</button>
+  <section class="pane plan-pane">
+    <div class="pane-head">
+      <h2>수업 단계</h2>
+      <div class="stepnav">
+        <button id="prev" class="nav" aria-label="이전 단계">‹</button>
+        <span id="curLabel"></span>
+        <button id="next" class="nav" aria-label="다음 단계">›</button>
+      </div>
     </div>
-    <div id="stepsEditor"></div>
-    <button id="addStep">+ 단계 추가</button>
-    <p class="muted">번호를 누르면 그 단계가 아이들 메모지에 바로 떠요. 고친 내용은 자동으로 저장돼요.</p>
+    <ol id="stepsEditor" class="steps"></ol>
+    <button id="addStep" class="add-step">단계 추가</button>
+    <p class="hint">번호를 누르면 그 단계가 아이들 메모지에 바로 떠요. 고친 내용은 저절로 저장돼요.</p>
   </section>
 </div>
 
-<script type="module" src="teacher.js?v=6"></script>
+<script type="module" src="teacher.js?v=8"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 import { openStore } from './store.js?v=6';
-import { pipSupported, openPip, autoMini } from './pip.js?v=6';
+import { pipSupported, openPip, autoMini } from './pip.js?v=8';
 
 // 요소를 미리 모아 둬요. 작은 창(PiP)으로 옮겨도 그대로 찾을 수 있게.
 const byId = {};
@@ -74,16 +74,19 @@ function renderSteps() {
   const box = $('stepsEditor');
   box.replaceChildren();
   task.steps.forEach((s, i) => {
-    const card = el('div', 'stepedit' + (i === task.current ? ' current' : ''));
-    const head = el('div', 'head');
-    const num = el('button', 'num', i === task.current ? `▶ ${i + 1}단계` : `${i + 1}단계`);
-    num.title = '이 단계를 지금 할 일로 보내기';
+    const isCur = i === task.current;
+    const card = el('li', 'step' + (isCur ? ' current' : i < task.current ? ' past' : ''));
+    const num = el('button', 'step-num', String(i + 1));
+    num.title = isCur ? '지금 아이들 메모지에 떠 있는 단계' : '이 단계를 아이들 메모지에 띄우기';
+    num.setAttribute('aria-label', `${i + 1}단계를 아이들 메모지에 띄우기`);
     num.onclick = () => setCurrent(i);
-    const title = el('input');
+    const body = el('div', 'step-body');
+    const title = el('input', 'step-title');
     title.value = s.title || '';
     title.placeholder = '단계 이름';
+    title.setAttribute('aria-label', `${i + 1}단계 이름`);
     title.oninput = () => { s.title = title.value; saveTask(600); };
-    const del = el('button', 'del', '✕');
+    const del = el('button', 'step-del', '지우기');
     del.title = '단계 지우기';
     del.onclick = () => {
       if (!confirm(`${i + 1}단계를 지울까요?`)) return;
@@ -92,17 +95,22 @@ function renderSteps() {
       saveTask();
       renderSteps();
     };
-    head.append(num, title, del);
-    const desc = el('textarea');
+    const desc = el('textarea', 'step-desc');
     desc.rows = 2;
     desc.value = s.desc || '';
     desc.placeholder = '아이들에게 보여줄 설명';
+    desc.setAttribute('aria-label', `${i + 1}단계 설명`);
     desc.oninput = () => { s.desc = desc.value; saveTask(600); };
-    card.append(head, desc);
+    const top = el('div', 'step-top');
+    top.append(title);
+    if (isCur) top.append(el('span', 'live', '아이들 화면에 떠 있어요'));
+    top.append(del);
+    body.append(top, desc);
+    card.append(num, body);
     box.append(card);
   });
   const n = task.steps.length;
-  $('curLabel').textContent = n ? `지금 ${task.current + 1} / ${n} 단계` : '단계를 추가해 주세요';
+  $('curLabel').textContent = n ? `${task.current + 1} / ${n}` : '단계 없음';
   $('prev').disabled = task.current <= 0;
   $('next').disabled = task.current >= n - 1;
 }
@@ -118,10 +126,7 @@ $('addStep').onclick = () => {
 };
 
 /* ── 학생 / 도움 요청 ── */
-function ago(t) {
-  const m = Math.floor((Date.now() - t) / 60000);
-  return m < 1 ? '방금' : `${m}분 전`;
-}
+const waitMin = (t) => Math.max(0, Math.floor((Date.now() - t) / 60000));
 
 function renderStudents() {
   const list = Object.entries(students).map(([id, s]) => ({ id, ...s }));
@@ -130,17 +135,22 @@ function renderStudents() {
 
   const hl = $('helpList');
   hl.replaceChildren();
-  if (!helps.length) hl.append(el('div', 'empty', '도움 요청이 없어요 🙂'));
+  if (!helps.length) hl.append(el('li', 'queue-empty', '지금은 도움을 기다리는 아이가 없어요.'));
   helps.forEach((s) => {
-    const card = el('div', 'helpcard');
-    const grow = el('div', 'grow');
-    grow.append(el('div', 'who', s.name || '이름 없음'));
-    if (s.msg) grow.append(el('div', 'msg', `“${s.msg}”`));
-    grow.append(el('div', 'meta', `${(s.helpStep ?? 0) + 1}단계 · ${ago(s.helpAt || Date.now())}`));
-    const btn = el('button', '', '해결했어요');
+    const m = waitMin(s.helpAt || Date.now());
+    const row = el('li', 'ask' + (m >= 5 ? ' long' : m >= 2 ? ' mid' : ''));
+    const wait = el('div', 'ask-wait');
+    wait.append(el('b', '', m < 1 ? '방금' : String(m)), el('span', '', m < 1 ? '' : '분째'));
+    const main = el('div', 'ask-main');
+    const who = el('div', 'ask-who', s.name || '이름 없음');
+    who.append(el('span', 'ask-step', `${(s.helpStep ?? 0) + 1}단계`));
+    main.append(who);
+    main.append(el('div', 'ask-msg' + (s.msg ? '' : ' none'), s.msg || '메시지 없이 불렀어요'));
+    const btn = el('button', 'ask-done', '해결');
+    btn.setAttribute('aria-label', `${s.name || '이 아이'} 도움 요청 해결`);
     btn.onclick = () => store.update(`rooms/${room}/students/${s.id}`, { help: false, msg: '' });
-    card.append(grow, btn);
-    hl.append(card);
+    row.append(wait, main, btn);
+    hl.append(row);
   });
   $('helpCount').textContent = helps.length;
   $('helpCount').classList.toggle('hot', helps.length > 0);
@@ -153,16 +163,18 @@ function renderStudents() {
   const box = $('students');
   box.replaceChildren();
   list.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ko'));
-  if (!list.length) box.append(el('div', 'empty', `아이들이 방 번호 ${room}으로 들어오면 여기에 보여요`));
+  if (!list.length) box.append(el('div', 'roster-empty', `아이들이 방 번호 ${room}으로 들어오면 여기에 이름이 생겨요.`));
   let done = 0;
   list.forEach((s) => {
     const isDone = s.doneStep === cur;
     if (isDone) done++;
-    const chip = el('span', 'chip' + (s.help ? ' help' : isDone ? ' done' : ''),
-      (s.help ? '🙋 ' : isDone ? '✅ ' : '') + (s.name || '이름 없음'));
-    box.append(chip);
+    const state = s.help ? 'help' : isDone ? 'done' : 'doing';
+    const tile = el('span', `kid ${state}`, s.name || '이름 없음');
+    tile.title = s.help ? '도움을 기다리는 중' : isDone ? `${cur + 1}단계를 다 했어요` : `${cur + 1}단계를 하는 중`;
+    box.append(tile);
   });
-  $('doneCount').textContent = list.length ? `${cur + 1}단계 완료 ${done} / ${list.length}명` : '';
+  $('doneCount').textContent = list.length ? `${cur + 1}단계 끝낸 아이 ${done} / ${list.length}명` : '';
+  $('doneBar').style.width = list.length ? `${(done / list.length) * 100}%` : '0';
 }
 
 let audio;

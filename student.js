@@ -1,5 +1,5 @@
 import { openStore } from './store.js?v=6';
-import { pipSupported, openPip, autoMini } from './pip.js?v=6';
+import { pipSupported, openPip, autoMini } from './pip.js?v=8';
 
 // 요소를 미리 모아 둬요. 작은 창(PiP)으로 옮겨도 그대로 찾을 수 있게.
 const byId = {};
@@ -46,7 +46,7 @@ async function start() {
   await store.update(myPath(), { name: me.name, joinedAt: Date.now() });
   $('join').hidden = true;
   $('app').hidden = false;
-  $('me').textContent = `👤 ${me.name}`;
+  $('me').textContent = me.name;
   subs.push(store.on(`rooms/${me.room}/task`, (t) => { task = t; render(); }));
   subs.push(store.on(myPath(), (s) => {
     if (s === null) { showJoin(); return; } // 선생님이 학생 목록을 비움
@@ -54,6 +54,8 @@ async function start() {
     render();
   }));
 }
+
+let lastStamp = null; // 도장은 방금 누른 때만 쾅 찍히는 움직임을 보여줘요
 
 function render() {
   const steps = (task && task.steps) || [];
@@ -64,14 +66,24 @@ function render() {
     $('title').textContent = '선생님이 할 일을 준비하고 있어요';
     $('desc').textContent = '';
   } else {
-    $('stepNo').textContent = `${cur + 1} / ${steps.length} 단계`;
+    $('stepNo').textContent = `${cur + 1}단계`;
     $('title').textContent = step.title || '';
     $('desc').textContent = step.desc || '';
   }
-  const done = mine && mine.doneStep === cur && !!step;
-  $('doneBtn').textContent = done ? '↩ 아직이에요' : '✅ 다 했어요';
+  // 단계 진행 점: 지난 단계 ● 지금 ◉ 남은 단계 ○
+  $('dots').replaceChildren(...steps.map((_, i) => {
+    const d = document.createElement('i');
+    d.className = i < cur ? 'past' : i === cur ? 'now' : '';
+    return d;
+  }));
+  const done = !!(mine && mine.doneStep === cur && step);
+  $('doneBtn').textContent = done ? '아직이에요' : '다 했어요';
   $('doneBtn').classList.toggle('on', done);
   $('doneBtn').disabled = !step;
+  const stampKey = done ? `${cur}` : '';
+  $('stamp').hidden = !done;
+  $('stamp').classList.toggle('fresh', done && stampKey !== lastStamp && lastStamp !== null);
+  lastStamp = stampKey;
 
   const helping = !!(mine && mine.help);
   $('waiting').hidden = !helping;

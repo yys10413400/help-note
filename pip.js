@@ -15,10 +15,13 @@ export async function openPip({ el, placeholder, cls, width, height }) {
     alert('이 브라우저에서는 작은 창을 띄울 수 없어요. PC의 크롬이나 엣지에서 열어 주세요.');
     return;
   }
-  const link = pip.document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = new URL('style.css', location.href).href;
-  pip.document.head.append(link);
+  // 원래 페이지의 글꼴·스타일을 그대로 가져가요
+  document.querySelectorAll('link[rel="stylesheet"]').forEach((l) => {
+    const link = pip.document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = l.href;
+    pip.document.head.append(link);
+  });
   pip.document.title = '도움 메모';
   pip.document.body.className = `${cls} mini pip`;
   const home = el.parentNode;
