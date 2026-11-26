@@ -1,5 +1,6 @@
 import { openStore } from './store.js?v=6';
 import { pipSupported, openPip, autoMini } from './pip.js?v=8';
+import { DEFAULT_REASONS, MAX_REASONS } from './reasons.js?v=11';
 
 // 요소를 미리 모아 둬요. 작은 창(PiP)으로 옮겨도 그대로 찾을 수 있게.
 const byId = {};
@@ -47,8 +48,10 @@ function openRoom() {
   subs.push(store.on(`rooms/${room}/task`, (t) => {
     if (task) return; // 할 일은 선생님 화면이 기준: 처음 한 번만 불러와요
     task = t && t.steps ? t : structuredClone(SAMPLE);
-    if (!t) saveTask();
+    if (!Array.isArray(task.reasons) || !task.reasons.length) task.reasons = structuredClone(DEFAULT_REASONS);
+    if (!t || !t.reasons) saveTask();
     renderSteps();
+    renderReasons();
   }));
   subs.push(store.on(`rooms/${room}/students`, (s) => {
     students = s || {};
@@ -125,33 +128,101 @@ $('addStep').onclick = () => {
   inputs[inputs.length - 1].focus();
 };
 
+/* ── 도움 버튼 편집 ── */
+function renderReasons() {
+  const box = $('reasonsEditor');
+  box.replaceChildren();
+  task.reasons.forEach((r, i) => {
+    const row = el('li', 'reason-edit');
+    const icon = el('input', 'reason-icon-input');
+    icon.value = r.icon || '';
+    icon.maxLength = 4;
+    icon.setAttribute('aria-label', `${i + 1}번 버튼 그림`);
+    icon.oninput = () => { r.icon = icon.value.trim(); saveTask(600); };
+    const label = el('input', 'reason-label-input');
+    label.value = r.label || '';
+    label.maxLength = 20;
+    label.placeholder = '버튼 이름';
+    label.setAttribute('aria-label', `${i + 1}번 버튼 이름`);
+    label.oninput = () => { r.label = label.value; saveTask(600); };
+    const urgentWrap = el('label', 'reason-urgent');
+    const urgent = el('input');
+    urgent.type = 'checkbox';
+    urgent.checked = !!r.urgent;
+    urgent.onchange = () => { r.urgent = urgent.checked; saveTask(); };
+    urgentWrap.append(urgent, document.createTextNode('급해요'));
+    urgentWrap.title = '체크하면 이 버튼을 누른 아이가 도움 요청 맨 위에 보여요';
+    const del = el('button', 'step-del', '지우기');
+    del.onclick = () => {
+      if (task.reasons.length <= 1) return alert('버튼은 하나 이상 있어야 해요.');
+      task.reasons.splice(i, 1);
+      saveTask();
+      renderReasons();
+    };
+    row.append(icon, label, urgentWrap, del);
+    box.append(row);
+  });
+  $('addReason').disabled = task.reasons.length >= MAX_REASONS;
+}
+$('addReason').onclick = () => {
+  if (task.reasons.length >= MAX_REASONS) return;
+  task.reasons.push({ icon: '🙋', label: '' });
+  saveTask();
+  renderReasons();
+  const inputs = $('reasonsEditor').querySelectorAll('.reason-label-input');
+  inputs[inputs.length - 1].focus();
+};
+$('resetReasons').onclick = () => {
+  if (!confirm('도움 버튼을 처음 6개로 되돌릴까요?')) return;
+  task.reasons = structuredClone(DEFAULT_REASONS);
+  saveTask();
+  renderReasons();
+};
+
 /* ── 학생 / 도움 요청 ── */
 const waitMin = (t) => Math.max(0, Math.floor((Date.now() - t) / 60000));
 
 function renderStudents() {
   const list = Object.entries(students).map(([id, s]) => ({ id, ...s }));
   const cur = task ? task.current : 0;
-  const helps = list.filter((s) => s.help).sort((a, b) => (a.helpAt || 0) - (b.helpAt || 0));
+  // 급한 요청(저장 문제 등)은 맨 위, 나머지는 먼저 부른 순서
+  const helps = list.filter((s) => s.help).sort((a, b) =>
+    (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0) || (a.helpAt || 0) - (b.helpAt || 0));
 
   const hl = $('helpList');
   hl.replaceChildren();
   if (!helps.length) hl.append(el('li', 'queue-empty', '지금은 도움을 기다리는 아이가 없어요.'));
   helps.forEach((s) => {
     const m = waitMin(s.helpAt || Date.now());
-    const row = el('li', 'ask' + (m >= 5 ? ' long' : m >= 2 ? ' mid' : ''));
+    const row = el('li', 'ask' + (s.urgent ? ' urgent' : m >= 5 ? ' long' : m >= 2 ? ' mid' : ''));
     const wait = el('div', 'ask-wait');
     wait.append(el('b', '', m < 1 ? '방금' : String(m)), el('span', '', m < 1 ? '' : '분째'));
     const main = el('div', 'ask-main');
     const who = el('div', 'ask-who', s.name || '이름 없음');
     who.append(el('span', 'ask-step', `${(s.helpStep ?? 0) + 1}단계`));
     main.append(who);
-    main.append(el('div', 'ask-msg' + (s.msg ? '' : ' none'), s.msg || '메시지 없이 불렀어요'));
+    const msg = el('div', 'ask-msg' + (s.msg ? '' : ' none'));
+    if (s.icon) msg.append(el('span', 'ask-icon', s.icon));
+    msg.append(document.createTextNode(s.msg || '그냥 불렀어요'));
+    if (s.urgent) msg.append(el('span', 'ask-urgent', '급해요'));
+    main.append(msg);
     const btn = el('button', 'ask-done', '해결');
     btn.setAttribute('aria-label', `${s.name || '이 아이'} 도움 요청 해결`);
-    btn.onclick = () => store.update(`rooms/${room}/students/${s.id}`, { help: false, msg: '' });
+    btn.onclick = () => store.update(`rooms/${room}/students/${s.id}`, { help: false, msg: '', icon: '', urgent: false });
     row.append(wait, main, btn);
     hl.append(row);
   });
+  // 같은 버튼을 3명 이상 누르면 전체 설명이 필요하다는 신호
+  const groups = {};
+  helps.forEach((s) => { if (s.msg) (groups[s.msg] ||= { icon: s.icon, n: 0 }).n++; });
+  const many = Object.entries(groups).filter(([, g]) => g.n >= 3).sort((a, b) => b[1].n - a[1].n);
+  $('clusters').replaceChildren(...many.map(([label, g]) => {
+    const c = el('div', 'cluster');
+    c.append(el('b', '', `${g.icon ? g.icon + ' ' : ''}${label}`), el('span', '', ` ${g.n}명이 같은 도움을 기다려요. 다 같이 설명해 보세요.`));
+    return c;
+  }));
+  $('clusters').hidden = !many.length;
+
   $('helpCount').textContent = helps.length;
   $('helpCount').classList.toggle('hot', helps.length > 0);
   document.title = helps.length ? `(${helps.length}) 도움 요청 · 도움 메모` : '도움 메모 · 선생님';

@@ -1,5 +1,6 @@
 import { openStore } from './store.js?v=6';
 import { pipSupported, openPip, autoMini } from './pip.js?v=8';
+import { reasonsOf } from './reasons.js?v=11';
 
 // 요소를 미리 모아 둬요. 작은 창(PiP)으로 옮겨도 그대로 찾을 수 있게.
 const byId = {};
@@ -88,7 +89,7 @@ function render() {
 
   const helping = !!(mine && mine.help);
   $('waiting').hidden = !helping;
-  $('myMsg').textContent = helping && mine.msg ? `“${mine.msg}”` : '';
+  $('myMsg').textContent = helping && mine.msg ? `${mine.icon ? mine.icon + ' ' : ''}${mine.msg}` : '';
   $('actions').hidden = helping || !$('helpForm').hidden;
   if (helping) $('helpForm').hidden = true;
 }
@@ -111,19 +112,35 @@ $('doneBtn').onclick = () => {
   store.update(myPath(), { doneStep: done ? -1 : cur });
 };
 
+// 도와주세요 → 이유 버튼을 하나 누르면 바로 선생님께 가요 (글쓰기 없음)
 $('helpBtn').onclick = () => {
+  const box = $('reasons');
+  box.replaceChildren(...reasonsOf(task).map((r) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'reason';
+    const icon = document.createElement('span');
+    icon.className = 'reason-icon';
+    icon.textContent = r.icon || '🙋';
+    icon.setAttribute('aria-hidden', 'true');
+    const label = document.createElement('span');
+    label.textContent = r.label || '도와주세요';
+    b.append(icon, label);
+    b.onclick = () => {
+      $('helpForm').hidden = true;
+      store.update(myPath(), {
+        help: true, msg: r.label || '도와주세요', icon: r.icon || '🙋', urgent: !!r.urgent,
+        helpAt: Date.now(), helpStep: currentIndex(),
+      });
+    };
+    return b;
+  }));
   $('helpForm').hidden = false;
   $('actions').hidden = true;
-  $('msg').value = '';
-  $('msg').focus();
+  box.firstChild && box.firstChild.focus();
 };
 $('cancelHelp').onclick = () => { $('helpForm').hidden = true; render(); };
-$('helpForm').onsubmit = (e) => {
-  e.preventDefault();
-  $('helpForm').hidden = true;
-  store.update(myPath(), { help: true, msg: $('msg').value.trim(), helpAt: Date.now(), helpStep: currentIndex() });
-};
-$('solved').onclick = () => store.update(myPath(), { help: false, msg: '' });
+$('solved').onclick = () => store.update(myPath(), { help: false, msg: '', icon: '', urgent: false });
 
 $('leave').onclick = () => {
   if (!confirm('나갈까요?')) return;

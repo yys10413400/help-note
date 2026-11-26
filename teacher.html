@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>도움 메모 · 선생님</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=11">
 <link rel="manifest" href="manifest-teacher.webmanifest">
 <link rel="icon" href="icon-192.png">
 <meta name="theme-color" content="#f3f5f4">
@@ -36,6 +36,7 @@
         <h2>도움 요청 <span id="helpCount" class="count">0</span></h2>
         <button id="pipBtn" class="ghost" title="다른 창 위에 항상 떠 있는 작은 창으로 띄워요">작은 창으로 띄우기</button>
       </div>
+      <div id="clusters" class="clusters" hidden></div>
       <ol id="helpList" class="queue-list"></ol>
     </div>
     <div id="pipHere" class="pip-here" hidden>도움 요청을 작은 창으로 띄웠어요. 작은 창을 닫으면 여기로 돌아와요.</div>
@@ -61,9 +62,17 @@
     <ol id="stepsEditor" class="steps"></ol>
     <button id="addStep" class="add-step">단계 추가</button>
     <p class="hint">번호를 누르면 그 단계가 아이들 메모지에 바로 떠요. 고친 내용은 저절로 저장돼요.</p>
+
+    <div class="pane-head reasons-head">
+      <h2>도움 버튼</h2>
+      <button id="resetReasons" class="ghost">처음 버튼으로</button>
+    </div>
+    <ul id="reasonsEditor" class="reasons-edit"></ul>
+    <button id="addReason" class="add-step">버튼 추가</button>
+    <p class="hint">아이들이 도와주세요를 누르면 이 버튼들이 나와요. 급해요에 체크한 버튼은 도움 요청 맨 위에 보여요.</p>
   </section>
 </div>
 
-<script type="module" src="teacher.js?v=8"></script>
+<script type="module" src="teacher.js?v=11"></script>
 </body>
 </html>

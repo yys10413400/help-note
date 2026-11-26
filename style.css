@@ -202,6 +202,41 @@ input, textarea { font: inherit; color: inherit; }
 .add-step:hover { border-color: var(--ink-3); color: var(--ink); }
 .hint { margin: 12px 2px 0; font-size: 13px; color: var(--ink-3); line-height: 1.55; }
 
+/* 도움 이유 */
+.ask-icon { margin-right: 6px; }
+.ask-urgent {
+  margin-left: 8px; font-size: 12px; font-weight: 700; color: #fff; background: var(--help);
+  border-radius: 4px; padding: 1px 6px; vertical-align: 2px;
+}
+.ask.urgent { background: #fff8f9; }
+.ask.urgent .ask-wait { color: var(--help); background: var(--help-soft); }
+.clusters { display: grid; gap: 6px; margin-bottom: 10px; }
+.cluster {
+  background: #fff6db; border: 1px solid #f1dc9a; border-radius: var(--radius-m);
+  padding: 10px 14px; font-size: 14px; color: #6b5210;
+}
+.cluster b { font-weight: 800; color: var(--ink); }
+
+/* 도움 버튼 편집 */
+.reasons-head { margin-top: 32px; }
+.reasons-edit {
+  list-style: none; margin: 0 0 10px; padding: 0;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m);
+}
+.reason-edit { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-top: 1px solid var(--line); }
+.reason-edit:first-child { border-top: 0; }
+.reason-edit input[type="text"], .reason-icon-input, .reason-label-input {
+  border: 1px solid transparent; background: transparent; border-radius: var(--radius-s); padding: 6px 8px;
+}
+.reason-icon-input { width: 46px; text-align: center; font-size: 18px; }
+.reason-label-input { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; }
+.reason-icon-input:hover, .reason-label-input:hover { border-color: var(--line); }
+.reason-icon-input:focus, .reason-label-input:focus { outline: none; border-color: var(--focus); }
+.reason-urgent { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--ink-2); white-space: nowrap; cursor: pointer; }
+.reason-urgent input { accent-color: var(--help); }
+.reason-edit:hover .step-del, .reason-edit .step-del:focus-visible { opacity: 1; }
+.add-step:disabled { opacity: .5; cursor: default; }
+
 /* 선생님 작은 창 (PiP) */
 .pip.teacher { background: var(--desk); padding: 10px; }
 .pip.teacher .queue { margin: 0; }
@@ -311,6 +346,25 @@ input, textarea { font: inherit; color: inherit; }
 .sheet textarea:focus { outline: none; border-color: var(--focus); }
 .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .row .btn { padding: 13px 20px; font-size: 17px; }
+
+/* 도움 이유 고르기 */
+.sheet-head { margin-bottom: 12px; }
+.sheet-title { margin: 0; font-size: 17px; font-weight: 800; }
+.reasons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.reason {
+  display: flex; align-items: center; gap: 10px; text-align: left;
+  border: 1.5px solid #f1d8b4; background: #fffbf2; border-radius: 12px;
+  padding: 13px 12px; font-size: 16px; font-weight: 700; line-height: 1.3; word-break: keep-all;
+  transition: transform .08s ease, background-color .15s ease;
+}
+.reason:hover { background: #fff1d6; border-color: #f0b96a; }
+.reason:active { transform: scale(.97); }
+.reason-icon { font-size: 22px; flex: none; }
+.mini .sheet-head { margin-bottom: 8px; }
+.mini .sheet-title { font-size: 14px; }
+.mini .reasons { gap: 6px; }
+.mini .reason { padding: 8px; font-size: 12.5px; gap: 6px; border-radius: 9px; }
+.mini .reason-icon { font-size: 16px; }
 
 .waiting { text-align: center; background: var(--help-soft); box-shadow: none; }
 .wait-title { margin: 4px 0 6px; font-size: 19px; font-weight: 800; color: #8e2236; display: flex; align-items: center; justify-content: center; gap: 10px; }
