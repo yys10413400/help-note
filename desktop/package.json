@@ -1,0 +1,33 @@
+{
+  "name": "help-note-desktop",
+  "version": "1.0.0",
+  "description": "도움 메모 - 늘 맨 위에 떠 있는 메모지",
+  "author": "help-note",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable"
+  },
+  "build": {
+    "appId": "io.github.yys10413400.helpnote",
+    "productName": "도움메모",
+    "files": [
+      "main.js",
+      "preload.js",
+      "offline.html",
+      "icon.png"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "icon.png"
+    },
+    "portable": {
+      "artifactName": "help-note.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.5.0",
+    "electron-builder": "^26.18.0"
+  }
+}

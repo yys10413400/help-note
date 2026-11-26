@@ -4,13 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>도움 메모</title>
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=5">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
 <meta name="theme-color" content="#ffe45c">
 </head>
 <body class="student">
+<div id="appbar" class="appbar" hidden>
+  <span>📝 도움 메모</span>
+  <button id="appMin" title="작게 내리기">─</button><button id="appClose" title="닫기">✕</button>
+</div>
 <div id="demo" class="demo" hidden>연습 모드: 이 컴퓨터 안에서만 작동해요</div>
 
 <section id="join" class="card join" hidden>
@@ -54,6 +58,6 @@
 
 <div id="pipHere" class="card pip-here" hidden>📌 메모지를 작은 창으로 띄웠어요.<br>작은 창을 닫으면 여기로 돌아와요.</div>
 
-<script type="module" src="student.js?v=3"></script>
+<script type="module" src="student.js?v=5"></script>
 </body>
 </html>

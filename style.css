@@ -115,6 +115,21 @@ label { display: block; font-weight: 600; margin-bottom: 14px; }
 .stepedit textarea { resize: vertical; }
 .stepedit .del { border: none; background: none; color: #b0a999; font-size: 20px; }
 /* ── 작은 창 (PC 작은 창, 갤럭시 팝업 화면) ── */
+/* 바탕화면 프로그램용 끌기 막대 */
+.appbar {
+  -webkit-app-region: drag; user-select: none;
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; height: 30px; padding-left: 10px;
+  background: #ffe45c; font-size: 13px; font-weight: 700; color: #5c4a00;
+}
+.appbar span { flex: 1; }
+.appbar button {
+  -webkit-app-region: no-drag; border: none; background: none; color: #5c4a00;
+  width: 34px; height: 30px; font-size: 14px;
+}
+.appbar button:hover { background: rgba(0,0,0,.08); }
+.app #leave { font-size: 12px; }
+
 .pinbtn {
   border: none; background: #ffe45c; color: #5c4a00; font-weight: 700; font-size: 14px;
   border-radius: 20px; padding: 6px 12px; margin-left: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.12);
@@ -136,7 +151,12 @@ label { display: block; font-weight: 600; margin-bottom: 14px; }
 .mini #helpForm, .mini .waiting { margin: 0 10px; padding: 12px; }
 .mini .waiting { font-size: 16px; }
 .mini label { margin-bottom: 8px; font-size: 14px; }
-.mini.student .join { margin: 12px 10px; padding: 16px; }
+.mini.student .join { margin: 10px; padding: 12px 14px; }
+.mini .join h1 { font-size: 18px; margin: 0 0 10px; }
+.mini .join input { padding: 7px 10px; margin-top: 4px; }
+.mini .join .big { padding: 9px; }
+.app::-webkit-scrollbar { width: 6px; }
+.app::-webkit-scrollbar-thumb { background: #d9d2c3; border-radius: 3px; }
 .pip.teacher { padding: 10px; }
 .pip.teacher #helpBox h2 { margin: 0 0 8px; }
 .pip .helpcard { padding: 8px 10px; gap: 8px; margin-bottom: 8px; }

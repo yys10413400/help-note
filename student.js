@@ -1,10 +1,20 @@
 import { openStore } from './store.js';
-import { pipSupported, openPip, autoMini } from './pip.js?v=3';
+import { pipSupported, openPip, autoMini } from './pip.js?v=5';
 
 // 요소를 미리 모아 둬요. 작은 창(PiP)으로 옮겨도 그대로 찾을 수 있게.
 const byId = {};
 document.querySelectorAll('[id]').forEach((e) => { byId[e.id] = e; });
 const $ = (id) => byId[id];
+
+// 바탕화면 프로그램(desktop 폴더) 안에서 열렸을 때: 테두리 없는 창이라 위에 끌기 막대와 버튼을 달아요
+const desktopApp = window.desktopApp;
+if (desktopApp) {
+  document.body.classList.add('app');
+  $('appbar').hidden = false;
+  $('appMin').onclick = () => desktopApp.minimize();
+  $('appClose').onclick = () => desktopApp.close();
+}
+
 const store = await openStore();
 if (store.mode === 'demo') $('demo').hidden = false;
 
@@ -112,7 +122,7 @@ $('leave').onclick = () => {
 
 /* ── 작게 보기 ── */
 autoMini();
-$('pipBtn').hidden = false;
+$('pipBtn').hidden = !!desktopApp; // 프로그램은 이미 늘 맨 위에 있어요
 $('pipBtn').onclick = () => openPip({ el: $('app'), placeholder: $('pipHere'), cls: 'student', width: 340, height: 330 });
 
 if (me) start(); else showJoin();
