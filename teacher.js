@@ -225,7 +225,7 @@ function renderStudents() {
 
   $('helpCount').textContent = helps.length;
   $('helpCount').classList.toggle('hot', helps.length > 0);
-  document.title = helps.length ? `(${helps.length}) 도움 요청 · 도움 메모` : '도움 메모 · 선생님';
+  document.title = helps.length ? `(${helps.length}) 도움 요청 · 빼꼼` : '빼꼼 · 선생님';
 
   const ids = new Set(helps.map((s) => s.id));
   if ([...ids].some((id) => !lastHelpIds.has(id))) ding();

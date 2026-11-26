@@ -22,7 +22,7 @@ export async function openPip({ el, placeholder, cls, width, height }) {
     link.href = l.href;
     pip.document.head.append(link);
   });
-  pip.document.title = '도움 메모';
+  pip.document.title = '빼꼼';
   pip.document.body.className = `${cls} mini pip`;
   const home = el.parentNode;
   const next = el.nextSibling;

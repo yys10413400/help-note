@@ -1,7 +1,7 @@
 {
   "id": "./teacher.html",
-  "name": "도움 메모 · 선생님",
-  "short_name": "도움 메모(선생님)",
+  "name": "빼꼼 · 선생님",
+  "short_name": "빼꼼(선생님)",
   "start_url": "./teacher.html",
   "scope": "./",
   "display": "standalone",

@@ -1,7 +1,7 @@
 {
   "id": "./index.html",
-  "name": "도움 메모",
-  "short_name": "도움 메모",
+  "name": "빼꼼",
+  "short_name": "빼꼼",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

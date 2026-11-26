@@ -1,4 +1,4 @@
-/* 도움 메모
+/* 빼꼼
    선생님: 차분한 업무용 화면. 가장 큰 것은 "도움 요청 줄" 하나.
    아이: 책상(회청색) 위에 붙인 노란 줄 메모지. */
 
@@ -277,7 +277,8 @@ input, textarea { font: inherit; color: inherit; }
 }
 
 .join { margin: 48px 20px; }
-.join h1 { margin: 0 0 20px; font-size: 26px; font-weight: 800; }
+.join h1 { margin: 0; font-size: 28px; font-weight: 800; }
+.join-sub { margin: 4px 0 22px; font-size: 15px; color: #a0692a; }
 .join label { display: block; font-size: 14px; font-weight: 600; color: #8a5a1c; margin-bottom: 14px; }
 .join input {
   display: block; width: 100%; margin-top: 6px; padding: 11px 12px; font-size: 17px;
@@ -415,7 +416,8 @@ input, textarea { font: inherit; color: inherit; }
 .mini .wait-title { font-size: 15px; }
 .mini .demo { font-size: 11px; padding: 3px 8px; }
 .mini .join { margin: 14px 10px 10px; }
-.mini .join h1 { font-size: 18px; margin-bottom: 10px; }
+.mini .join h1 { font-size: 20px; }
+.mini .join-sub { font-size: 12px; margin: 2px 0 10px; }
 .mini .join label { font-size: 13px; margin-bottom: 8px; }
 .mini .join input { padding: 7px 10px; font-size: 15px; margin-top: 4px; }
 .mini .join .btn { padding: 10px; }

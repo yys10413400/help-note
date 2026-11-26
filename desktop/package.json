@@ -1,7 +1,7 @@
 {
   "name": "help-note-desktop",
-  "version": "1.0.0",
-  "description": "도움 메모 - 늘 맨 위에 떠 있는 메모지",
+  "version": "1.1.0",
+  "description": "빼꼼 - 늘 맨 위에 떠 있는 수업 메모지",
   "author": "help-note",
   "main": "main.js",
   "private": true,
@@ -11,7 +11,7 @@
   },
   "build": {
     "appId": "io.github.yys10413400.helpnote",
-    "productName": "도움메모",
+    "productName": "빼꼼",
     "files": [
       "main.js",
       "preload.js",

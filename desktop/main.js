@@ -1,4 +1,4 @@
-// 도움 메모 바탕화면 프로그램: 테두리 없는 작은 메모지 창이 늘 맨 위에 떠 있어요.
+// 빼꼼 바탕화면 프로그램: 테두리 없는 작은 메모지 창이 늘 맨 위에 떠 있어요.
 const { app, BrowserWindow, ipcMain, screen, shell } = require('electron');
 const path = require('path');
 
@@ -22,7 +22,7 @@ function createWindow() {
     frame: false,
     alwaysOnTop: true,
     backgroundColor: '#f3efe6',
-    title: '도움 메모',
+    title: '빼꼼',
     icon: path.join(__dirname, 'icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js') },
   });
