@@ -82,6 +82,7 @@ function render() {
   $('doneBtn').disabled = !step;
   const stampKey = done ? `${cur}` : '';
   $('stamp').hidden = !done;
+  $('note').classList.toggle('is-done', done);
   $('stamp').classList.toggle('fresh', done && stampKey !== lastStamp && lastStamp !== null);
   lastStamp = stampKey;
 

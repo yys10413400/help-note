@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>도움 메모</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=10">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
@@ -20,10 +20,12 @@
 
 <section id="join" class="join paper" hidden>
   <span class="tape" aria-hidden="true"></span>
-  <h1>도움 메모</h1>
-  <label>방 번호<input id="room" inputmode="numeric" maxlength="6" placeholder="선생님이 알려준 번호" autocomplete="off"></label>
-  <label>내 이름<input id="name" maxlength="12" placeholder="이름" autocomplete="off"></label>
-  <button id="joinBtn" class="btn primary">들어가기</button>
+  <div class="paper-inner">
+    <h1>도움 메모</h1>
+    <label>방 번호<input id="room" inputmode="numeric" maxlength="6" placeholder="선생님이 알려준 번호" autocomplete="off"></label>
+    <label>내 이름<input id="name" maxlength="12" placeholder="이름" autocomplete="off"></label>
+    <button id="joinBtn" class="btn primary">들어가기</button>
+  </div>
 </section>
 
 <main id="app" hidden>
@@ -32,15 +34,44 @@
     <span class="bar-actions"><button id="pipBtn" class="chip-btn" title="다른 창 위에 항상 떠 있는 작은 메모지로 띄워요">작게 띄우기</button><button id="leave" class="text-btn">나가기</button></span>
   </header>
 
-  <article class="note paper">
+  <article class="note paper" id="note">
     <span class="tape" aria-hidden="true"></span>
-    <div class="note-top">
-      <span class="step-label" id="stepNo"></span>
-      <span class="dots" id="dots" aria-hidden="true"></span>
+    <div class="paper-inner">
+      <div class="note-top">
+        <span class="step-label" id="stepNo"></span>
+        <span class="dots" id="dots" aria-hidden="true"></span>
+      </div>
+      <h2 id="title"></h2>
+      <p id="desc"></p>
+      <span id="stamp" class="stamp" hidden>다 했어요</span>
     </div>
-    <h2 id="title"></h2>
-    <p id="desc"></p>
-    <span id="stamp" class="stamp" hidden>다 했어요</span>
+    <svg class="buddy" viewBox="0 0 120 112" aria-hidden="true">
+      <!-- 빼꼼 고양이 (직접 그린 그림) -->
+      <g stroke="#7a4a1f" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M22 44 L26 10 L50 30 Z" fill="#f7a64a"/>
+        <path d="M98 44 L94 10 L70 30 Z" fill="#f7a64a"/>
+        <path d="M60 24 C30 24 14 44 14 68 C14 92 34 104 60 104 C86 104 106 92 106 68 C106 44 90 24 60 24 Z" fill="#f7a64a"/>
+        <path d="M32 33 L30 20 L42 29 Z" fill="#ffd9b0" stroke-width="0"/>
+        <path d="M88 33 L90 20 L78 29 Z" fill="#ffd9b0" stroke-width="0"/>
+        <path d="M60 24 C62 30 60 34 60 34 M50 26 C52 31 51 34 51 34 M70 26 C68 31 69 34 69 34" fill="none" stroke-width="2.5"/>
+        <ellipse cx="60" cy="80" rx="15" ry="11" fill="#fff1df" stroke-width="0"/>
+      </g>
+      <circle cx="44" cy="66" r="4.2" fill="#3b2414"/>
+      <circle cx="76" cy="66" r="4.2" fill="#3b2414"/>
+      <circle cx="45.5" cy="64.5" r="1.4" fill="#fff"/>
+      <circle cx="77.5" cy="64.5" r="1.4" fill="#fff"/>
+      <ellipse cx="32" cy="78" rx="8" ry="5" fill="#ff9e9e" opacity=".75"/>
+      <ellipse cx="88" cy="78" rx="8" ry="5" fill="#ff9e9e" opacity=".75"/>
+      <path d="M56 74 L64 74 L60 78 Z" fill="#7a4a1f"/>
+      <path d="M60 78 C58 83 54 84 52 82 M60 78 C62 83 66 84 68 82" fill="none" stroke="#7a4a1f" stroke-width="2.5" stroke-linecap="round"/>
+      <g stroke="#7a4a1f" stroke-width="3" fill="#f7a64a">
+        <ellipse cx="38" cy="104" rx="13" ry="9"/>
+        <ellipse cx="82" cy="104" rx="13" ry="9"/>
+      </g>
+      <g stroke="#7a4a1f" stroke-width="2" stroke-linecap="round">
+        <path d="M34 100 V106 M42 100 V106 M78 100 V106 M86 100 V106"/>
+      </g>
+    </svg>
   </article>
 
   <div class="actions" id="actions">
@@ -66,6 +97,6 @@
 
 <div id="pipHere" class="pip-here" hidden>메모지를 작은 창으로 띄웠어요.<br>작은 창을 닫으면 여기로 돌아와요.</div>
 
-<script type="module" src="student.js?v=8"></script>
+<script type="module" src="student.js?v=10"></script>
 </body>
 </html>
