@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>도움 메모 · 선생님</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="teacher">
+<div id="demo" class="demo" hidden>연습 모드: 이 컴퓨터의 브라우저 탭끼리만 연결돼요. Firebase를 설정하면 아이들 태블릿과 연결돼요.</div>
+
+<header class="tbar">
+  <h1>📝 도움 메모 · 선생님</h1>
+  <div class="roominfo">방 번호<b id="roomCode"></b><button id="newRoom" class="link">바꾸기</button></div>
+  <div>학생 주소 <a id="studentLink" target="_blank"></a> <button id="copy" class="link">복사</button></div>
+</header>
+
+<div class="grid">
+  <section class="col">
+    <h2>🙋 도움 요청 <span id="helpCount" class="pill">0</span></h2>
+    <div id="helpList"></div>
+
+    <h2>👧 우리 반 <span id="doneCount" class="pill"></span></h2>
+    <div id="students" class="students"></div>
+    <button id="clearStudents" class="link danger">학생 목록 비우기</button>
+  </section>
+
+  <section class="col">
+    <h2>📌 지금 할 일</h2>
+    <div class="stepnav">
+      <button id="prev" title="이전 단계">◀</button>
+      <span id="curLabel"></span>
+      <button id="next" title="다음 단계">▶</button>
+    </div>
+    <div id="stepsEditor"></div>
+    <button id="addStep">+ 단계 추가</button>
+    <p class="muted">번호를 누르면 그 단계가 아이들 메모지에 바로 떠요. 고친 내용은 자동으로 저장돼요.</p>
+  </section>
+</div>
+
+<script type="module" src="teacher.js"></script>
+</body>
+</html>

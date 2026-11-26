@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>도움 메모</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="student">
+<div id="demo" class="demo" hidden>연습 모드: 이 컴퓨터 안에서만 작동해요</div>
+
+<section id="join" class="card join" hidden>
+  <h1>📝 도움 메모</h1>
+  <label>방 번호<input id="room" inputmode="numeric" maxlength="6" placeholder="선생님이 알려준 번호"></label>
+  <label>내 이름<input id="name" maxlength="12" placeholder="이름"></label>
+  <button id="joinBtn" class="big">들어가기</button>
+</section>
+
+<main id="app" hidden>
+  <header class="bar"><span id="me"></span><button id="leave" class="link">나가기</button></header>
+
+  <article class="note">
+    <div class="step" id="stepNo"></div>
+    <h2 id="title"></h2>
+    <p id="desc"></p>
+  </article>
+
+  <div class="actions" id="actions">
+    <button id="doneBtn" class="big ok">✅ 다 했어요</button>
+    <button id="helpBtn" class="big help">🙋 도와주세요</button>
+  </div>
+
+  <form id="helpForm" class="card" hidden>
+    <label>어디가 어려운지 써 주세요 (안 써도 돼요)<textarea id="msg" maxlength="80" rows="2"></textarea></label>
+    <div class="row">
+      <button type="button" id="cancelHelp" class="link">취소</button>
+      <button class="big help">보내기</button>
+    </div>
+  </form>
+
+  <div id="waiting" class="card waiting" hidden>
+    <p>🙋 선생님께 알렸어요. 곧 갈게요!</p>
+    <p id="myMsg" class="muted"></p>
+    <button id="solved" class="link">혼자 해결했어요</button>
+  </div>
+</main>
+
+<script type="module" src="student.js"></script>
+</body>
+</html>

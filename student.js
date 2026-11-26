@@ -1,0 +1,109 @@
+import { openStore } from './store.js';
+
+const $ = (id) => document.getElementById(id);
+const store = await openStore();
+if (store.mode === 'demo') $('demo').hidden = false;
+
+const ME_KEY = 'helpnote-me';
+const params = new URLSearchParams(location.search);
+const urlRoom = params.get('room');
+let me = JSON.parse(localStorage.getItem(ME_KEY) || 'null');
+if (me && urlRoom && urlRoom !== me.room) me = null;
+if (urlRoom) $('room').value = urlRoom;
+
+let task = null;
+let mine = null;
+let subs = [];
+
+const newId = () =>
+  (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36)).slice(0, 12);
+const myPath = () => `rooms/${me.room}/students/${me.id}`;
+
+function showJoin() {
+  subs.forEach((u) => typeof u === 'function' && u());
+  subs = [];
+  $('join').hidden = false;
+  $('app').hidden = true;
+  $('name').value = me ? me.name : '';
+}
+
+async function start() {
+  localStorage.setItem(ME_KEY, JSON.stringify(me));
+  await store.update(myPath(), { name: me.name, joinedAt: Date.now() });
+  $('join').hidden = true;
+  $('app').hidden = false;
+  $('me').textContent = `👤 ${me.name}`;
+  subs.push(store.on(`rooms/${me.room}/task`, (t) => { task = t; render(); }));
+  subs.push(store.on(myPath(), (s) => {
+    if (s === null) { showJoin(); return; } // 선생님이 학생 목록을 비움
+    mine = s;
+    render();
+  }));
+}
+
+function render() {
+  const steps = (task && task.steps) || [];
+  const cur = Math.min((task && task.current) || 0, Math.max(steps.length - 1, 0));
+  const step = steps[cur];
+  if (!step) {
+    $('stepNo').textContent = '잠깐만요';
+    $('title').textContent = '선생님이 할 일을 준비하고 있어요';
+    $('desc').textContent = '';
+  } else {
+    $('stepNo').textContent = `${cur + 1} / ${steps.length} 단계`;
+    $('title').textContent = step.title || '';
+    $('desc').textContent = step.desc || '';
+  }
+  const done = mine && mine.doneStep === cur && !!step;
+  $('doneBtn').textContent = done ? '↩ 아직이에요' : '✅ 다 했어요';
+  $('doneBtn').classList.toggle('on', done);
+  $('doneBtn').disabled = !step;
+
+  const helping = !!(mine && mine.help);
+  $('waiting').hidden = !helping;
+  $('myMsg').textContent = helping && mine.msg ? `“${mine.msg}”` : '';
+  $('actions').hidden = helping || !$('helpForm').hidden;
+  if (helping) $('helpForm').hidden = true;
+}
+
+const currentIndex = () => (task && task.current) || 0;
+
+$('joinBtn').onclick = () => {
+  const room = $('room').value.trim();
+  const name = $('name').value.trim();
+  if (!/^\d{3,6}$/.test(room)) return alert('방 번호를 확인해 주세요.');
+  if (!name) return alert('이름을 써 주세요.');
+  me = { room, name, id: (me && me.room === room && me.id) || newId() };
+  start();
+};
+$('name').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('joinBtn').click(); });
+
+$('doneBtn').onclick = () => {
+  const cur = currentIndex();
+  const done = mine && mine.doneStep === cur;
+  store.update(myPath(), { doneStep: done ? -1 : cur });
+};
+
+$('helpBtn').onclick = () => {
+  $('helpForm').hidden = false;
+  $('actions').hidden = true;
+  $('msg').value = '';
+  $('msg').focus();
+};
+$('cancelHelp').onclick = () => { $('helpForm').hidden = true; render(); };
+$('helpForm').onsubmit = (e) => {
+  e.preventDefault();
+  $('helpForm').hidden = true;
+  store.update(myPath(), { help: true, msg: $('msg').value.trim(), helpAt: Date.now(), helpStep: currentIndex() });
+};
+$('solved').onclick = () => store.update(myPath(), { help: false, msg: '' });
+
+$('leave').onclick = () => {
+  if (!confirm('나갈까요?')) return;
+  store.remove(myPath());
+  localStorage.removeItem(ME_KEY);
+  me = null;
+  showJoin();
+};
+
+if (me) start(); else showJoin();
